@@ -31,7 +31,7 @@ class CustomEarlyStoppingAtLoss(keras.callbacks.Callback):
             self.best = current
             self.wait = 0
             self.best_weights = self.model.get_weights()
-            if epoch == self.stop_tranning_value[0] and self.best > self.stop_tranning_value[1] :
+            if epoch == self.stop_tranning_value[0] and self.best < self.stop_tranning_value[1] :
                 self.stopped_epoch = epoch
                 self.model.stop_training = True
                 self.model.set_weights(self.best_weights)
