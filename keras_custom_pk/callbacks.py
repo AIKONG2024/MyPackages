@@ -9,13 +9,15 @@ import numpy as np
 # monitor: 모니터링 metrics
 # overfitting_stop_line : 과적합 되면 멈출 기준
 # overfitting_count : 과적합 카운팅 기준
+# stop_tranning_value: stop 기준 (잘될 떡잎만 키우기) 튜플형태(epoch, monitoring value) 
 class CustomEarlyStoppingAtLoss(keras.callbacks.Callback):
-    def __init__(self, patience=0, monitor="loss", overfitting_stop_line=0.0, overfitting_count = 0, is_log=False):
+    def __init__(self, patience=0, monitor="loss", overfitting_stop_line=0.0, overfitting_count = 0, stop_tranning_value = (0,0.), is_log=False):
         super(CustomEarlyStoppingAtLoss, self).__init__()
         self.patience = patience
         self.best_weights = None
         self.monitor = monitor
         self.overfitting_stop_line = overfitting_stop_line
+        self.stop_tranning_value = stop_tranning_value
         self.is_log = is_log
         self.overfitting_count = overfitting_count
     def on_train_begin(self, logs=None):
@@ -29,6 +31,10 @@ class CustomEarlyStoppingAtLoss(keras.callbacks.Callback):
             self.best = current
             self.wait = 0
             self.best_weights = self.model.get_weights()
+            if epoch == self.stop_tranning_value[0] and self.best > self.stop_tranning_value[1] :
+                self.stopped_epoch = epoch
+                self.model.stop_training = True
+                self.model.set_weights(self.best_weights)
             if self.is_log:
                 print(
                 f"""
