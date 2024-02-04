@@ -10,6 +10,9 @@ import numpy as np
 # overfitting_stop_line : 과적합 되면 멈출 기준
 # overfitting_count : 과적합 카운팅 기준
 # stop_tranning_value: stop 기준 (잘될 떡잎만 키우기) 튜플형태(epoch, monitoring value) 
+#===========================================================================================
+#?? fit만 반복을 걸어주면 가중치가 계속 쌓이는 효과가 있음 ==> 가중치 공유 모델 생성이 가능해보임!
+#===========================================================================================
 class CustomEarlyStoppingAtLoss(keras.callbacks.Callback):
     def __init__(self, patience=0, monitor="loss", overfitting_stop_line=0.0, overfitting_count = 0, stop_tranning_epoch = 0, stop_tranning_value = 0.0, is_log=False):
         super(CustomEarlyStoppingAtLoss, self).__init__()
